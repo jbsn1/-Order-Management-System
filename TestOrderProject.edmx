@@ -1,0 +1,1544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TestOrderProject.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'testdb.dbo.MailNotification' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MailNotification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserCode" Type="varchar" MaxLength="50" />
+          <Property Name="OrderCode" Type="varchar" MaxLength="50" />
+          <Property Name="Message" Type="varchar(max)" />
+          <Property Name="MailDate" Type="datetime" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'testdb.dbo.OrderItem' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Line" Type="int" />
+          <Property Name="Orderno" Type="varchar" MaxLength="50" />
+          <Property Name="ItemCode" Type="varchar" MaxLength="50" />
+          <Property Name="TotalPirice" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="TotalDiscount" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="TotalTax" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="Height" Type="float" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="Image" Type="varchar" MaxLength="500" />
+          <Property Name="StockKeepingUnit" Type="float" />
+          <Property Name="barcode" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblItem">
+          <Key>
+            <PropertyRef Name="ItemCode" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="50" />
+          <Property Name="Height" Type="float" />
+          <Property Name="Weight" Type="float" />
+          <Property Name="Image" Type="varchar" MaxLength="50" />
+          <Property Name="StockKeepingUnit" Type="float" />
+          <Property Name="barcode" Type="varchar" MaxLength="50" />
+          <Property Name="Availablequantity" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="3" />
+        </EntityType>
+        <EntityType Name="tblOrder">
+          <Key>
+            <PropertyRef Name="Orderno" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orderno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserCode" Type="varchar" MaxLength="50" />
+          <Property Name="TotalPirice" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="TotalDiscount" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="TotalTax" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="OrdeDate" Type="datetime" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="Deliveryfee" Type="decimal" Precision="18" Scale="3" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'testdb.dbo.tbluser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tbluser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserCode" Type="varchar" MaxLength="50" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" />
+          <Property Name="Password" Type="varchar" MaxLength="50" />
+          <Property Name="Role" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="decimal" Precision="10" Scale="0" />
+        </EntityType>
+        <Association Name="FK__OrderItem__ItemC__247D636F">
+          <End Role="tblItem" Type="Self.tblItem" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemCode" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="ItemCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__Order__23893F36">
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOrder">
+              <PropertyRef Name="Orderno" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="Orderno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddUser_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeId" Type="int" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="result" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="DeleteData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="deleteemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteFromTbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="deleteuser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="delUserCodeNotExist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetUsersList_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetUsersList_Procs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GopiRaju_22_08_2019" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="Amount" Type="int" Mode="In" />
+          <Parameter Name="DML" Type="char" Mode="In" />
+        </Function>
+        <Function Name="GopiRaju_22_8_2019" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="Amount" Type="int" Mode="In" />
+          <Parameter Name="DML" Type="char" Mode="In" />
+        </Function>
+        <Function Name="inertpro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_tblSalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+          <Parameter Name="OrderId" Type="int" Mode="In" />
+          <Parameter Name="UserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Insert_update_tbleSalesOrderR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="varchar" Mode="In" />
+          <Parameter Name="Amount" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertAndUpdate_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertAndUpdateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insertDataIntosalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="userCode" Type="varchar" Mode="In" />
+          <Parameter Name="customerCode" Type="varchar" Mode="In" />
+          <Parameter Name="orderDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="insertemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertintoUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Usercode" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Usertype" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="InsertSales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="int" Mode="In" />
+        </Function>
+        <Function Name="insertUpdatesalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="userCode" Type="varchar" Mode="In" />
+          <Parameter Name="customerCode" Type="varchar" Mode="In" />
+          <Parameter Name="amount" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PA1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ORDERNUMBER" Type="varchar" Mode="In" />
+          <Parameter Name="USERCODE" Type="varchar" Mode="In" />
+          <Parameter Name="CUSTOMERCODE" Type="varchar" Mode="In" />
+          <Parameter Name="ORDERDATE" Type="varchar" Mode="In" />
+          <Parameter Name="AMOUNT" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PA2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ORDERNUMBER" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PR_GET_TBLUSERSALE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PR_GET_TBLUSERSALEORDER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PR_INS_UPD_TBLSALESORDER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IP_OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="IP_UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="IP_CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="IP_OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="IP_Amount" Type="int" Mode="In" />
+          <Parameter Name="IP_FLAG" Type="char" Mode="In" />
+        </Function>
+        <Function Name="proc_employeesdetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="employee_Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="proinsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="iduser" Type="int" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+          <Parameter Name="idtype" Type="int" Mode="In" />
+          <Parameter Name="nameype" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="proinsert1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="iduser" Type="int" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+          <Parameter Name="idtype" Type="int" Mode="In" />
+          <Parameter Name="nameype" Type="varchar" Mode="In" />
+          <Parameter Name="typecode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="proinsert3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="samplegridview" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SearchUser_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeId" Type="int" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SearchUsers_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="selectorders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="selectpro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_adduser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertype" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_ddl" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_delete2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_DeleteUserById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_DeleteUsers_mpr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="USerCode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_displayall" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="usertype" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_displaytbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_displaytbluser99" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_EMPLYEE_TEST" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EMPLOYEE_NAME" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_getall" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_GetAllUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_getdata" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetSalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_GetUserById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_GetUsers" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_GetUsersType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Sp_GetUserTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_Gridfill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="flag" Type="varchar" Mode="In" />
+          <Parameter Name="ucode" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="UType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_insert1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="AMount" Type="money" Mode="In" />
+        </Function>
+        <Function Name="sp_Insert2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="nvarchar" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_insertsales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderno" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_insertsales1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderno" Type="nvarchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_inserttable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ordernumber" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="date" Mode="In" />
+          <Parameter Name="amount" Type="money" Mode="In" />
+        </Function>
+        <Function Name="sp_InsertUpdateSaleOrdersdata" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="typeOfOperation" Type="varchar" Mode="In" />
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="SP_InsertUpdateSalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_pushadduser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertype" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_SalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="saleodreid" Type="int" Mode="In" />
+          <Parameter Name="ordernumber" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="date" Mode="In" />
+          <Parameter Name="StatementType" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SalesOrder_mpr" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNum" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_Search" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_searchGridfill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="nvarchar" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="type" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SearchR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Sp_SearchUserByCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SortedUsersList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_STUENDE_NAME" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="student_name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_STUENDE_NAMETWO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_TOPPER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ROW" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Update1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="AMount" Type="money" Mode="In" />
+        </Function>
+        <Function Name="sp_update2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="nvarchar" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_updatesales1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderno" Type="nvarchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="datetime" Mode="In" />
+          <Parameter Name="amount" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_updateuser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="usertype" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Sp_UpdateUserById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_UserDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeCode" Type="varchar" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_useredit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeCode" Type="varchar" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_UsersList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="spDeletetbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spDeletetblusertype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spGettbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spGettblusertype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spInserttbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spInserttblusertype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spInsertUpdateSaleOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="typeOfOperation" Type="varchar" Mode="In" />
+          <Parameter Name="OrderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="date" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="spUpdatetbluser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="usertypecode" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spUpdatetblusertype" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="tblSalesOrder1_Test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="tblsalesorders1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ordernumber" Type="varchar" Mode="In" />
+          <Parameter Name="usercode" Type="varchar" Mode="In" />
+          <Parameter Name="customercode" Type="varchar" Mode="In" />
+          <Parameter Name="orderdate" Type="datetime" Mode="InOut" />
+        </Function>
+        <Function Name="update_tblSalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="varchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+          <Parameter Name="OrderId" Type="int" Mode="In" />
+          <Parameter Name="UserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateDataIntosalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="orderNumber" Type="varchar" Mode="In" />
+          <Parameter Name="userCode" Type="varchar" Mode="In" />
+          <Parameter Name="customerCode" Type="varchar" Mode="In" />
+          <Parameter Name="orderDate" Type="date" Mode="In" />
+          <Parameter Name="amount" Type="int" Mode="In" />
+        </Function>
+        <Function Name="updateemp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UpdateUser_Proc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeId" Type="int" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="result" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="user_add" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="varchar" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="User_AddUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="User_CRUD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Action" Type="varchar" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Code" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeCode" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="user_delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="User_Get" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="User_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="UserTypeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="User_Remove" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="user_upade" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="varchar" Mode="In" />
+          <Parameter Name="code" Type="varchar" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="user_view" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="userCodeNotExist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="UserType_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserTypeID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Usp_deletetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="USP_GETDETAILS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NAME" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="USP_insertUpdateUserDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserCode" Type="varchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Usp_InsertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="nvarchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="varchar" Mode="In" />
+          <Parameter Name="Retmsg" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="usp_SalesOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="UserCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="OrderDate" Type="datetime" Mode="In" />
+          <Parameter Name="Amount" Type="money" Mode="In" />
+          <Parameter Name="OrderId" Type="int" Mode="In" />
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Usp_UpdatetUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Code" Type="nvarchar" Mode="In" />
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+          <Parameter Name="UserType" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="UspBindGrid" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Viewby_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="TestOrderProjectStoreContainer">
+          <EntitySet Name="tblItem" EntityType="Self.tblItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOrder" EntityType="Self.tblOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MailNotification" EntityType="Self.MailNotification" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [MailNotification].[Id] AS [Id], 
+    [MailNotification].[UserCode] AS [UserCode], 
+    [MailNotification].[OrderCode] AS [OrderCode], 
+    [MailNotification].[Message] AS [Message], 
+    [MailNotification].[MailDate] AS [MailDate], 
+    [MailNotification].[CreatedOn] AS [CreatedOn]
+    FROM [dbo].[MailNotification] AS [MailNotification]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="OrderItem" EntityType="Self.OrderItem" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [OrderItem].[id] AS [id], 
+    [OrderItem].[Line] AS [Line], 
+    [OrderItem].[Orderno] AS [Orderno], 
+    [OrderItem].[ItemCode] AS [ItemCode], 
+    [OrderItem].[TotalPirice] AS [TotalPirice], 
+    [OrderItem].[TotalDiscount] AS [TotalDiscount], 
+    [OrderItem].[TotalTax] AS [TotalTax], 
+    [OrderItem].[Height] AS [Height], 
+    [OrderItem].[Weight] AS [Weight], 
+    [OrderItem].[Image] AS [Image], 
+    [OrderItem].[StockKeepingUnit] AS [StockKeepingUnit], 
+    [OrderItem].[barcode] AS [barcode]
+    FROM [dbo].[OrderItem] AS [OrderItem]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="tbluser" EntityType="Self.tbluser" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tbluser].[Id] AS [Id], 
+    [tbluser].[UserCode] AS [UserCode], 
+    [tbluser].[UserName] AS [UserName], 
+    [tbluser].[Password] AS [Password], 
+    [tbluser].[Role] AS [Role], 
+    [tbluser].[PhoneNumber] AS [PhoneNumber]
+    FROM [dbo].[tbluser] AS [tbluser]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__OrderItem__ItemC__247D636F" Association="Self.FK__OrderItem__ItemC__247D636F">
+            <End Role="tblItem" EntitySet="tblItem" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__Order__23893F36" Association="Self.FK__OrderItem__Order__23893F36">
+            <End Role="tblOrder" EntitySet="tblOrder" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestOrderProject" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblItem">
+          <Key>
+            <PropertyRef Name="ItemCode" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StockKeepingUnit" Type="Double" />
+          <Property Name="barcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Availablequantity" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="3" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__ItemC__247D636F" FromRole="tblItem" ToRole="OrderItem" />
+        </EntityType>
+        <EntityType Name="tblOrder">
+          <Key>
+            <PropertyRef Name="Orderno" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orderno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPirice" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="TotalDiscount" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="TotalTax" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="OrdeDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Deliveryfee" Type="Decimal" Precision="18" Scale="3" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__Order__23893F36" FromRole="tblOrder" ToRole="OrderItem" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Line" Type="Int32" />
+          <Property Name="Orderno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ItemCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPirice" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="TotalDiscount" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="TotalTax" Type="Decimal" Precision="18" Scale="3" />
+          <NavigationProperty Name="tblItem" Relationship="Self.FK__OrderItem__ItemC__247D636F" FromRole="OrderItem" ToRole="tblItem" />
+          <NavigationProperty Name="tblOrder" Relationship="Self.FK__OrderItem__Order__23893F36" FromRole="OrderItem" ToRole="tblOrder" />
+          <Property Name="Height" Type="Double" />
+          <Property Name="Weight" Type="Double" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="StockKeepingUnit" Type="Double" />
+          <Property Name="barcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbluser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="Decimal" Precision="10" Scale="0" />
+        </EntityType>
+        <Association Name="FK__OrderItem__ItemC__247D636F">
+          <End Role="tblItem" Type="Self.tblItem" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblItem">
+              <PropertyRef Name="ItemCode" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="ItemCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__Order__23893F36">
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOrder">
+              <PropertyRef Name="Orderno" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="Orderno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblItems" EntityType="Self.tblItem" />
+          <EntitySet Name="tblOrders" EntityType="Self.tblOrder" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+          <EntitySet Name="tblusers" EntityType="Self.tbluser" />
+          <AssociationSet Name="FK__OrderItem__ItemC__247D636F" Association="Self.FK__OrderItem__ItemC__247D636F">
+            <End Role="tblItem" EntitySet="tblItems" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__Order__23893F36" Association="Self.FK__OrderItem__Order__23893F36">
+            <End Role="tblOrder" EntitySet="tblOrders" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <EntitySet Name="MailNotifications" EntityType="TestOrderProject.MailNotification" />
+          <FunctionImport Name="AddUser_Proc">
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="result" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteData">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="deleteemp">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteFromTbluser">
+          <Parameter Name="usercode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="deleteuser">
+          <Parameter Name="usercode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="delUserCodeNotExist" />
+          <FunctionImport Name="GetUsersList_Proc" />
+          <FunctionImport Name="GetUsersList_Procs" />
+          <FunctionImport Name="GopiRaju_22_08_2019">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+            <Parameter Name="DML" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GopiRaju_22_8_2019">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+            <Parameter Name="DML" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="inertpro">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+            <Parameter Name="code" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_tblSalesOrder">
+            <Parameter Name="OrderNumber" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="OrderId" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Insert_update_tbleSalesOrderR">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="String" />
+            <Parameter Name="Amount" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertAndUpdate_Proc">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="UserTypeID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertAndUpdateUser">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserTypeCode" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insertDataIntosalesOrder">
+            <Parameter Name="orderNumber" Mode="In" Type="String" />
+            <Parameter Name="userCode" Mode="In" Type="String" />
+            <Parameter Name="customerCode" Mode="In" Type="String" />
+            <Parameter Name="orderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="insertemp">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertintoUser">
+            <Parameter Name="Usercode" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Usertype" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertSales">
+            <Parameter Name="orderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="insertUpdatesalesOrder">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="userCode" Mode="In" Type="String" />
+            <Parameter Name="customerCode" Mode="In" Type="String" />
+            <Parameter Name="amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PA1">
+            <Parameter Name="ORDERNUMBER" Mode="In" Type="String" />
+            <Parameter Name="USERCODE" Mode="In" Type="String" />
+            <Parameter Name="CUSTOMERCODE" Mode="In" Type="String" />
+            <Parameter Name="ORDERDATE" Mode="In" Type="String" />
+            <Parameter Name="AMOUNT" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PA2">
+          <Parameter Name="ORDERNUMBER" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PR_GET_TBLUSERSALE" />
+          <FunctionImport Name="PR_GET_TBLUSERSALEORDER" />
+          <FunctionImport Name="PR_INS_UPD_TBLSALESORDER">
+            <Parameter Name="IP_OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="IP_UserCode" Mode="In" Type="String" />
+            <Parameter Name="IP_CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="IP_OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IP_Amount" Mode="In" Type="Int32" />
+            <Parameter Name="IP_FLAG" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proc_employeesdetails">
+          <Parameter Name="employee_Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proinsert">
+            <Parameter Name="iduser" Mode="In" Type="Int32" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+            <Parameter Name="idtype" Mode="In" Type="Int32" />
+            <Parameter Name="nameype" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proinsert1">
+            <Parameter Name="iduser" Mode="In" Type="Int32" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+            <Parameter Name="idtype" Mode="In" Type="Int32" />
+            <Parameter Name="nameype" Mode="In" Type="String" />
+            <Parameter Name="typecode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proinsert3">
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="samplegridview" />
+          <FunctionImport Name="SearchUser_Proc">
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchUsers_Proc">
+          <Parameter Name="UserCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="selectorders" ReturnType="Collection(TestOrderProject.selectorders_Result)">
+          <Parameter Name="usercode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="selectpro" />
+          <FunctionImport Name="sp_adduser">
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertype" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ddl" />
+          <FunctionImport Name="sp_delete2">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_DeleteUserById">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_DeleteUsers_mpr" />
+          <FunctionImport Name="sp_details">
+          <Parameter Name="USerCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_displayall">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="usertype" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_displaytbluser" />
+          <FunctionImport Name="sp_displaytbluser99" />
+          <FunctionImport Name="SP_EMPLYEE_TEST">
+          <Parameter Name="EMPLOYEE_NAME" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_getall" />
+          <FunctionImport Name="Sp_GetAllUsers" />
+          <FunctionImport Name="sp_getdata">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetSalesOrder" />
+          <FunctionImport Name="Sp_GetUserById">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_GetUsers" />
+          <FunctionImport Name="Sp_GetUsersType" />
+          <FunctionImport Name="Sp_GetUserTypes" />
+          <FunctionImport Name="sp_Gridfill" ReturnType="Collection(TestOrderProject.sp_Gridfill_Result)" />
+          <FunctionImport Name="sp_insert">
+            <Parameter Name="flag" Mode="In" Type="String" />
+            <Parameter Name="ucode" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="UType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_insert1">
+            <Parameter Name="orderNumber" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="AMount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Insert2">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_insertsales">
+            <Parameter Name="orderno" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_insertsales1">
+            <Parameter Name="orderno" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_inserttable">
+            <Parameter Name="ordernumber" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="In" Type="DateTime" />
+            <Parameter Name="amount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_InsertUpdateSaleOrdersdata">
+            <Parameter Name="typeOfOperation" Mode="In" Type="String" />
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertUpdateSalesOrder">
+            <Parameter Name="OrderNo" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_pushadduser">
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertype" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SalesOrder">
+            <Parameter Name="saleodreid" Mode="In" Type="Int32" />
+            <Parameter Name="ordernumber" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="In" Type="DateTime" />
+            <Parameter Name="StatementType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SalesOrder_mpr">
+            <Parameter Name="OrderNum" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Search">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_searchGridfill">
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SearchR">
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_SearchUserByCode">
+          <Parameter Name="UserCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SortedUsersList" />
+          <FunctionImport Name="SP_STUENDE_NAME">
+          <Parameter Name="student_name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_STUENDE_NAMETWO" />
+          <FunctionImport Name="SP_TOPPER">
+          <Parameter Name="ROW" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Update1">
+            <Parameter Name="orderNumber" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="AMount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="sp_update2">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_updatesales1">
+            <Parameter Name="orderno" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="In" Type="DateTime" />
+            <Parameter Name="amount" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_updateuser">
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="usertype" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_UpdateUserById">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="UserTypeId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_UserDelete">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="UserTypeCode" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_useredit">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="UserTypeCode" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_UsersList" />
+          <FunctionImport Name="spDeletetbluser">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spDeletetblusertype">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spGettbluser">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spGettblusertype">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spInserttbluser">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spInserttblusertype">
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spInsertUpdateSaleOrders">
+            <Parameter Name="typeOfOperation" Mode="In" Type="String" />
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="spUpdatetbluser">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="usertypecode" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spUpdatetblusertype">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="tblSalesOrder1_Test">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="tblsalesorders1">
+            <Parameter Name="ordernumber" Mode="In" Type="String" />
+            <Parameter Name="usercode" Mode="In" Type="String" />
+            <Parameter Name="customercode" Mode="In" Type="String" />
+            <Parameter Name="orderdate" Mode="InOut" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="update_tblSalesOrder">
+            <Parameter Name="OrderNumber" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="OrderId" Mode="In" Type="Int32" />
+            <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateDataIntosalesOrder">
+            <Parameter Name="orderNumber" Mode="In" Type="String" />
+            <Parameter Name="userCode" Mode="In" Type="String" />
+            <Parameter Name="customerCode" Mode="In" Type="String" />
+            <Parameter Name="orderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="updateemp">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateUser_Proc">
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="result" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="user_add">
+            <Parameter Name="id" Mode="In" Type="String" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="User_AddUpdate">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="UserTypeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="User_CRUD">
+            <Parameter Name="Action" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="UserTypeCode" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="user_delete">
+          <Parameter Name="id" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="User_Get">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="User_List">
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="UserTypeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="User_Remove">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="user_upade">
+            <Parameter Name="id" Mode="In" Type="String" />
+            <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="user_view" ReturnType="Collection(TestOrderProject.user_view_Result)" />
+          <FunctionImport Name="userCodeNotExist" ReturnType="Collection(String)" />
+          <FunctionImport Name="UserType_List">
+          <Parameter Name="UserTypeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Usp_deletetUser">
+          <Parameter Name="Code" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_GETDETAILS">
+          <Parameter Name="NAME" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="USP_insertUpdateUserDetails">
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Usp_InsertUser">
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="String" />
+            <Parameter Name="Retmsg" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_SalesOrder">
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="UserCode" Mode="In" Type="String" />
+            <Parameter Name="CustomerCode" Mode="In" Type="String" />
+            <Parameter Name="OrderDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="OrderId" Mode="In" Type="Int32" />
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Usp_UpdatetUser">
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="UserType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UspBindGrid" />
+          <FunctionImport Name="Viewby_id">
+          <Parameter Name="id" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="MailNotification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MailDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="selectorders_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="Orderno" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="UserCode" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="TotalPirice" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Decimal" Name="TotalDiscount" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="Decimal" Name="TotalTax" Nullable="true" Precision="18" Scale="3" />
+          <Property Type="DateTime" Name="OrdeDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="Deliveryfee" Nullable="true" Precision="18" Scale="3" />
+        </ComplexType>
+        <ComplexType Name="sp_Gridfill_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="UserCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Role" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="PhoneNumber" Nullable="true" Precision="10" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="user_view_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="UserCode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Role" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="PhoneNumber" Nullable="true" Precision="10" Scale="0" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestOrderProjectStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="tblItems">
+            <EntityTypeMapping TypeName="TestOrderProject.tblItem">
+              <MappingFragment StoreEntitySet="tblItem">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="StockKeepingUnit" ColumnName="StockKeepingUnit" />
+                <ScalarProperty Name="barcode" ColumnName="barcode" />
+                <ScalarProperty Name="Availablequantity" ColumnName="Availablequantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblOrders">
+            <EntityTypeMapping TypeName="TestOrderProject.tblOrder">
+              <MappingFragment StoreEntitySet="tblOrder">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Orderno" ColumnName="Orderno" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="TotalPirice" ColumnName="TotalPirice" />
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="TotalTax" ColumnName="TotalTax" />
+                <ScalarProperty Name="OrdeDate" ColumnName="OrdeDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Deliveryfee" ColumnName="Deliveryfee" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="TestOrderProject.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
+                <ScalarProperty Name="barcode" ColumnName="barcode" />
+                <ScalarProperty Name="StockKeepingUnit" ColumnName="StockKeepingUnit" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="Orderno" ColumnName="Orderno" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="TotalPirice" ColumnName="TotalPirice" />
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="TotalTax" ColumnName="TotalTax" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblusers">
+            <EntityTypeMapping TypeName="TestOrderProject.tbluser">
+              <MappingFragment StoreEntitySet="tbluser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MailNotifications">
+            <EntityTypeMapping TypeName="TestOrderProject.MailNotification">
+              <MappingFragment StoreEntitySet="MailNotification">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="MailDate" ColumnName="MailDate" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="OrderCode" ColumnName="OrderCode" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddUser_Proc" FunctionName="TestOrderProject.Store.AddUser_Proc" />
+          <FunctionImportMapping FunctionImportName="DeleteData" FunctionName="TestOrderProject.Store.DeleteData" />
+          <FunctionImportMapping FunctionImportName="deleteemp" FunctionName="TestOrderProject.Store.deleteemp" />
+          <FunctionImportMapping FunctionImportName="deleteFromTbluser" FunctionName="TestOrderProject.Store.deleteFromTbluser" />
+          <FunctionImportMapping FunctionImportName="deleteuser" FunctionName="TestOrderProject.Store.deleteuser" />
+          <FunctionImportMapping FunctionImportName="delUserCodeNotExist" FunctionName="TestOrderProject.Store.delUserCodeNotExist" />
+          <FunctionImportMapping FunctionImportName="GetUsersList_Proc" FunctionName="TestOrderProject.Store.GetUsersList_Proc" />
+          <FunctionImportMapping FunctionImportName="GetUsersList_Procs" FunctionName="TestOrderProject.Store.GetUsersList_Procs" />
+          <FunctionImportMapping FunctionImportName="GopiRaju_22_08_2019" FunctionName="TestOrderProject.Store.GopiRaju_22_08_2019" />
+          <FunctionImportMapping FunctionImportName="GopiRaju_22_8_2019" FunctionName="TestOrderProject.Store.GopiRaju_22_8_2019" />
+          <FunctionImportMapping FunctionImportName="inertpro" FunctionName="TestOrderProject.Store.inertpro" />
+          <FunctionImportMapping FunctionImportName="insert_tblSalesOrder" FunctionName="TestOrderProject.Store.insert_tblSalesOrder" />
+          <FunctionImportMapping FunctionImportName="Insert_update_tbleSalesOrderR" FunctionName="TestOrderProject.Store.Insert_update_tbleSalesOrderR" />
+          <FunctionImportMapping FunctionImportName="InsertAndUpdate_Proc" FunctionName="TestOrderProject.Store.InsertAndUpdate_Proc" />
+          <FunctionImportMapping FunctionImportName="InsertAndUpdateUser" FunctionName="TestOrderProject.Store.InsertAndUpdateUser" />
+          <FunctionImportMapping FunctionImportName="insertDataIntosalesOrder" FunctionName="TestOrderProject.Store.insertDataIntosalesOrder" />
+          <FunctionImportMapping FunctionImportName="insertemp" FunctionName="TestOrderProject.Store.insertemp" />
+          <FunctionImportMapping FunctionImportName="InsertintoUser" FunctionName="TestOrderProject.Store.InsertintoUser" />
+          <FunctionImportMapping FunctionImportName="InsertSales" FunctionName="TestOrderProject.Store.InsertSales" />
+          <FunctionImportMapping FunctionImportName="insertUpdatesalesOrder" FunctionName="TestOrderProject.Store.insertUpdatesalesOrder" />
+          <FunctionImportMapping FunctionImportName="PA1" FunctionName="TestOrderProject.Store.PA1" />
+          <FunctionImportMapping FunctionImportName="PA2" FunctionName="TestOrderProject.Store.PA2" />
+          <FunctionImportMapping FunctionImportName="PR_GET_TBLUSERSALE" FunctionName="TestOrderProject.Store.PR_GET_TBLUSERSALE" />
+          <FunctionImportMapping FunctionImportName="PR_GET_TBLUSERSALEORDER" FunctionName="TestOrderProject.Store.PR_GET_TBLUSERSALEORDER" />
+          <FunctionImportMapping FunctionImportName="PR_INS_UPD_TBLSALESORDER" FunctionName="TestOrderProject.Store.PR_INS_UPD_TBLSALESORDER" />
+          <FunctionImportMapping FunctionImportName="proc_employeesdetails" FunctionName="TestOrderProject.Store.proc_employeesdetails" />
+          <FunctionImportMapping FunctionImportName="proinsert" FunctionName="TestOrderProject.Store.proinsert" />
+          <FunctionImportMapping FunctionImportName="proinsert1" FunctionName="TestOrderProject.Store.proinsert1" />
+          <FunctionImportMapping FunctionImportName="proinsert3" FunctionName="TestOrderProject.Store.proinsert3" />
+          <FunctionImportMapping FunctionImportName="samplegridview" FunctionName="TestOrderProject.Store.samplegridview" />
+          <FunctionImportMapping FunctionImportName="SearchUser_Proc" FunctionName="TestOrderProject.Store.SearchUser_Proc" />
+          <FunctionImportMapping FunctionImportName="SearchUsers_Proc" FunctionName="TestOrderProject.Store.SearchUsers_Proc" />
+          <FunctionImportMapping FunctionImportName="selectorders" FunctionName="TestOrderProject.Store.selectorders">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestOrderProject.selectorders_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Orderno" ColumnName="Orderno" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="TotalPirice" ColumnName="TotalPirice" />
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="TotalTax" ColumnName="TotalTax" />
+                <ScalarProperty Name="OrdeDate" ColumnName="OrdeDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Deliveryfee" ColumnName="Deliveryfee" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="selectpro" FunctionName="TestOrderProject.Store.selectpro" />
+          <FunctionImportMapping FunctionImportName="sp_adduser" FunctionName="TestOrderProject.Store.sp_adduser" />
+          <FunctionImportMapping FunctionImportName="sp_ddl" FunctionName="TestOrderProject.Store.sp_ddl" />
+          <FunctionImportMapping FunctionImportName="sp_delete2" FunctionName="TestOrderProject.Store.sp_delete2" />
+          <FunctionImportMapping FunctionImportName="Sp_DeleteUserById" FunctionName="TestOrderProject.Store.Sp_DeleteUserById" />
+          <FunctionImportMapping FunctionImportName="sp_DeleteUsers_mpr" FunctionName="TestOrderProject.Store.sp_DeleteUsers_mpr" />
+          <FunctionImportMapping FunctionImportName="sp_details" FunctionName="TestOrderProject.Store.sp_details" />
+          <FunctionImportMapping FunctionImportName="sp_displayall" FunctionName="TestOrderProject.Store.sp_displayall" />
+          <FunctionImportMapping FunctionImportName="sp_displaytbluser" FunctionName="TestOrderProject.Store.sp_displaytbluser" />
+          <FunctionImportMapping FunctionImportName="sp_displaytbluser99" FunctionName="TestOrderProject.Store.sp_displaytbluser99" />
+          <FunctionImportMapping FunctionImportName="SP_EMPLYEE_TEST" FunctionName="TestOrderProject.Store.SP_EMPLYEE_TEST" />
+          <FunctionImportMapping FunctionImportName="sp_getall" FunctionName="TestOrderProject.Store.sp_getall" />
+          <FunctionImportMapping FunctionImportName="Sp_GetAllUsers" FunctionName="TestOrderProject.Store.Sp_GetAllUsers" />
+          <FunctionImportMapping FunctionImportName="sp_getdata" FunctionName="TestOrderProject.Store.sp_getdata" />
+          <FunctionImportMapping FunctionImportName="SP_GetSalesOrder" FunctionName="TestOrderProject.Store.SP_GetSalesOrder" />
+          <FunctionImportMapping FunctionImportName="Sp_GetUserById" FunctionName="TestOrderProject.Store.Sp_GetUserById" />
+          <FunctionImportMapping FunctionImportName="Sp_GetUsers" FunctionName="TestOrderProject.Store.Sp_GetUsers" />
+          <FunctionImportMapping FunctionImportName="Sp_GetUsersType" FunctionName="TestOrderProject.Store.Sp_GetUsersType" />
+          <FunctionImportMapping FunctionImportName="Sp_GetUserTypes" FunctionName="TestOrderProject.Store.Sp_GetUserTypes" />
+          <FunctionImportMapping FunctionImportName="sp_Gridfill" FunctionName="TestOrderProject.Store.sp_Gridfill">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestOrderProject.sp_Gridfill_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_insert" FunctionName="TestOrderProject.Store.sp_insert" />
+          <FunctionImportMapping FunctionImportName="sp_insert1" FunctionName="TestOrderProject.Store.sp_insert1" />
+          <FunctionImportMapping FunctionImportName="sp_Insert2" FunctionName="TestOrderProject.Store.sp_Insert2" />
+          <FunctionImportMapping FunctionImportName="sp_insertsales" FunctionName="TestOrderProject.Store.sp_insertsales" />
+          <FunctionImportMapping FunctionImportName="sp_insertsales1" FunctionName="TestOrderProject.Store.sp_insertsales1" />
+          <FunctionImportMapping FunctionImportName="sp_inserttable" FunctionName="TestOrderProject.Store.sp_inserttable" />
+          <FunctionImportMapping FunctionImportName="sp_InsertUpdateSaleOrdersdata" FunctionName="TestOrderProject.Store.sp_InsertUpdateSaleOrdersdata" />
+          <FunctionImportMapping FunctionImportName="SP_InsertUpdateSalesOrder" FunctionName="TestOrderProject.Store.SP_InsertUpdateSalesOrder" />
+          <FunctionImportMapping FunctionImportName="sp_pushadduser" FunctionName="TestOrderProject.Store.sp_pushadduser" />
+          <FunctionImportMapping FunctionImportName="SP_SalesOrder" FunctionName="TestOrderProject.Store.SP_SalesOrder" />
+          <FunctionImportMapping FunctionImportName="sp_SalesOrder_mpr" FunctionName="TestOrderProject.Store.sp_SalesOrder_mpr" />
+          <FunctionImportMapping FunctionImportName="sp_Search" FunctionName="TestOrderProject.Store.sp_Search" />
+          <FunctionImportMapping FunctionImportName="sp_searchGridfill" FunctionName="TestOrderProject.Store.sp_searchGridfill" />
+          <FunctionImportMapping FunctionImportName="sp_SearchR" FunctionName="TestOrderProject.Store.sp_SearchR" />
+          <FunctionImportMapping FunctionImportName="Sp_SearchUserByCode" FunctionName="TestOrderProject.Store.Sp_SearchUserByCode" />
+          <FunctionImportMapping FunctionImportName="sp_SortedUsersList" FunctionName="TestOrderProject.Store.sp_SortedUsersList" />
+          <FunctionImportMapping FunctionImportName="SP_STUENDE_NAME" FunctionName="TestOrderProject.Store.SP_STUENDE_NAME" />
+          <FunctionImportMapping FunctionImportName="SP_STUENDE_NAMETWO" FunctionName="TestOrderProject.Store.SP_STUENDE_NAMETWO" />
+          <FunctionImportMapping FunctionImportName="SP_TOPPER" FunctionName="TestOrderProject.Store.SP_TOPPER" />
+          <FunctionImportMapping FunctionImportName="sp_Update1" FunctionName="TestOrderProject.Store.sp_Update1" />
+          <FunctionImportMapping FunctionImportName="sp_update2" FunctionName="TestOrderProject.Store.sp_update2" />
+          <FunctionImportMapping FunctionImportName="sp_updatesales1" FunctionName="TestOrderProject.Store.sp_updatesales1" />
+          <FunctionImportMapping FunctionImportName="sp_updateuser" FunctionName="TestOrderProject.Store.sp_updateuser" />
+          <FunctionImportMapping FunctionImportName="Sp_UpdateUserById" FunctionName="TestOrderProject.Store.Sp_UpdateUserById" />
+          <FunctionImportMapping FunctionImportName="sp_UserDelete" FunctionName="TestOrderProject.Store.sp_UserDelete" />
+          <FunctionImportMapping FunctionImportName="sp_useredit" FunctionName="TestOrderProject.Store.sp_useredit" />
+          <FunctionImportMapping FunctionImportName="sp_UsersList" FunctionName="TestOrderProject.Store.sp_UsersList" />
+          <FunctionImportMapping FunctionImportName="spDeletetbluser" FunctionName="TestOrderProject.Store.spDeletetbluser" />
+          <FunctionImportMapping FunctionImportName="spDeletetblusertype" FunctionName="TestOrderProject.Store.spDeletetblusertype" />
+          <FunctionImportMapping FunctionImportName="spGettbluser" FunctionName="TestOrderProject.Store.spGettbluser" />
+          <FunctionImportMapping FunctionImportName="spGettblusertype" FunctionName="TestOrderProject.Store.spGettblusertype" />
+          <FunctionImportMapping FunctionImportName="spInserttbluser" FunctionName="TestOrderProject.Store.spInserttbluser" />
+          <FunctionImportMapping FunctionImportName="spInserttblusertype" FunctionName="TestOrderProject.Store.spInserttblusertype" />
+          <FunctionImportMapping FunctionImportName="spInsertUpdateSaleOrders" FunctionName="TestOrderProject.Store.spInsertUpdateSaleOrders" />
+          <FunctionImportMapping FunctionImportName="spUpdatetbluser" FunctionName="TestOrderProject.Store.spUpdatetbluser" />
+          <FunctionImportMapping FunctionImportName="spUpdatetblusertype" FunctionName="TestOrderProject.Store.spUpdatetblusertype" />
+          <FunctionImportMapping FunctionImportName="tblSalesOrder1_Test" FunctionName="TestOrderProject.Store.tblSalesOrder1_Test" />
+          <FunctionImportMapping FunctionImportName="tblsalesorders1" FunctionName="TestOrderProject.Store.tblsalesorders1" />
+          <FunctionImportMapping FunctionImportName="update_tblSalesOrder" FunctionName="TestOrderProject.Store.update_tblSalesOrder" />
+          <FunctionImportMapping FunctionImportName="updateDataIntosalesOrder" FunctionName="TestOrderProject.Store.updateDataIntosalesOrder" />
+          <FunctionImportMapping FunctionImportName="updateemp" FunctionName="TestOrderProject.Store.updateemp" />
+          <FunctionImportMapping FunctionImportName="UpdateUser_Proc" FunctionName="TestOrderProject.Store.UpdateUser_Proc" />
+          <FunctionImportMapping FunctionImportName="user_add" FunctionName="TestOrderProject.Store.user_add" />
+          <FunctionImportMapping FunctionImportName="User_AddUpdate" FunctionName="TestOrderProject.Store.User_AddUpdate" />
+          <FunctionImportMapping FunctionImportName="User_CRUD" FunctionName="TestOrderProject.Store.User_CRUD" />
+          <FunctionImportMapping FunctionImportName="user_delete" FunctionName="TestOrderProject.Store.user_delete" />
+          <FunctionImportMapping FunctionImportName="User_Get" FunctionName="TestOrderProject.Store.User_Get" />
+          <FunctionImportMapping FunctionImportName="User_List" FunctionName="TestOrderProject.Store.User_List" />
+          <FunctionImportMapping FunctionImportName="User_Remove" FunctionName="TestOrderProject.Store.User_Remove" />
+          <FunctionImportMapping FunctionImportName="user_upade" FunctionName="TestOrderProject.Store.user_upade" />
+          <FunctionImportMapping FunctionImportName="user_view" FunctionName="TestOrderProject.Store.user_view">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestOrderProject.user_view_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="userCodeNotExist" FunctionName="TestOrderProject.Store.userCodeNotExist" />
+          <FunctionImportMapping FunctionImportName="UserType_List" FunctionName="TestOrderProject.Store.UserType_List" />
+          <FunctionImportMapping FunctionImportName="Usp_deletetUser" FunctionName="TestOrderProject.Store.Usp_deletetUser" />
+          <FunctionImportMapping FunctionImportName="USP_GETDETAILS" FunctionName="TestOrderProject.Store.USP_GETDETAILS" />
+          <FunctionImportMapping FunctionImportName="USP_insertUpdateUserDetails" FunctionName="TestOrderProject.Store.USP_insertUpdateUserDetails" />
+          <FunctionImportMapping FunctionImportName="Usp_InsertUser" FunctionName="TestOrderProject.Store.Usp_InsertUser" />
+          <FunctionImportMapping FunctionImportName="usp_SalesOrder" FunctionName="TestOrderProject.Store.usp_SalesOrder" />
+          <FunctionImportMapping FunctionImportName="Usp_UpdatetUser" FunctionName="TestOrderProject.Store.Usp_UpdatetUser" />
+          <FunctionImportMapping FunctionImportName="UspBindGrid" FunctionName="TestOrderProject.Store.UspBindGrid" />
+          <FunctionImportMapping FunctionImportName="Viewby_id" FunctionName="TestOrderProject.Store.Viewby_id" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

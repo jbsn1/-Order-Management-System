@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4407449bc69b40c3b1c254689b6af62f" Name="Diagram1" ZoomLevel="79">
+        <EntityTypeShape EntityType="TestOrderProject.tblItem" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestOrderProject.tblOrder" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestOrderProject.OrderItem" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestOrderProject.tbluser" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="TestOrderProject.FK__OrderItem__ItemC__247D636F" ManuallyRouted="false" />
+        <AssociationConnector Association="TestOrderProject.FK__OrderItem__Order__23893F36" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TestOrderProject.MailNotification" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
